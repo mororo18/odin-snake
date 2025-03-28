@@ -37,6 +37,7 @@ Snake :: struct {
     body: [SNAKE_MAX_LENGHT] GridPos,
     body_len: u32,
     direction: Direction,
+    next_direction: Direction,
     dead: bool,
 }
 
@@ -80,13 +81,15 @@ update_snake_direction :: proc(state: ^GameState) {
                 || state.snake.direction == get_right_circular(i, directions[:])
             )
         ) {
-            state.snake.direction = directions[i]; 
+            state.snake.next_direction = directions[i]; 
             return;
         }
     }
 }
 
 update_snake_position :: proc(state: ^GameState) {
+    state.snake.direction = state.snake.next_direction
+
     for i in 0..<state.snake.body_len-1 {
         state.snake.body[i].x = state.snake.body[i+1].x
         state.snake.body[i].y = state.snake.body[i+1].y
